@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
   <style>
-    .dog { fill: #ffb156; }
-    .ear { fill: #e89d45; }
-    .nose { fill: #333; }
+    .dog { fill: #ffffff; }
+    .ear { fill: #f4f4f4; }
+    .nose { fill: #222; }
+    .cheek { fill: #ffefef; }
   </style>
   <g class="dog">
-    <circle cx="20" cy="20" r="18"/>
-    <path class="ear" d="M8,12 Q4,8 6,4 L12,10 Z"/>
-    <path class="ear" d="M32,12 Q36,8 34,4 L28,10 Z"/>
-    <circle class="nose" cx="20" cy="22" r="3"/>
-    <path d="M15,18 Q20,22 25,18" stroke="#333" fill="none" stroke-width="2"/>
+    <!-- 몸통 -->
+    <circle cx="20" cy="20" r="18" class="dog"/>
+    <!-- 귀 -->
+    <path class="ear" d="M10,15 C8,13 8,8 12,8 L14,12 Z"/>
+    <path class="ear" d="M30,15 C32,13 32,8 28,8 L26,12 Z"/>
+    <!-- 볼터치 -->
+    <circle class="cheek" cx="12" cy="22" r="4" opacity="0.6"/>
+    <circle class="cheek" cx="28" cy="22" r="4" opacity="0.6"/>
+    <!-- 눈 -->
+    <circle cx="15" cy="18" r="2.2" fill="#222"/>
+    <circle cx="25" cy="18" r="2.2" fill="#222"/>
+    <circle cx="14.5" cy="17" r="0.8" fill="#fff"/>
+    <circle cx="24.5" cy="17" r="0.8" fill="#fff"/>
+    <!-- 코 -->
+    <circle class="nose" cx="20" cy="21" r="2"/>
+    <!-- 귀여운 미소 -->
+    <path d="M15,24 Q20,26 25,24" stroke="#222" fill="none" stroke-width="1.5" stroke-linecap="round"/>
   </g>
 </svg>

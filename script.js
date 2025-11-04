@@ -42,33 +42,7 @@ class Sprite {
       ctx.rotate(Math.sin(Date.now() / 100) * 0.1);
     }
     
-    // 말티즈 스타일 (흰색 오버레이)
-    if (options.maltese) {
-      // 그림자 효과
-      ctx.shadowColor = 'rgba(0,0,0,0.2)';
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetY = 2;
-      
-      // 기본 이미지 렌더링
-      ctx.drawImage(this.image, -w/2, -h/2, w, h);
-      
-      // 흰색 오버레이로 말티즈 느낌 추가
-      ctx.globalCompositeOperation = 'source-atop';
-      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, w/2);
-      gradient.addColorStop(0, 'rgba(255,255,255,0.95)');
-      gradient.addColorStop(1, 'rgba(255,245,240,0.85)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(-w/2, -h/2, w, h);
-      
-      // 눈 효과
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = '#000';
-      ctx.beginPath();
-      ctx.arc(-w/5, -h/8, 2, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      ctx.drawImage(this.image, -w/2, -h/2, w, h);
-    }
+    ctx.drawImage(this.image, -w/2, -h/2, w, h);
     
     ctx.restore();
   }
@@ -83,10 +57,10 @@ class BoneParticle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.vx = (Math.random() - 0.5) * 10;
-    this.vy = (Math.random() - 0.5) * 10 - 5;
+    this.vx = (Math.random() - 0.5) * 20;
+    this.vy = (Math.random() - 0.5) * 20 - 10;
     this.rotation = Math.random() * Math.PI * 2;
-    this.rotationSpeed = (Math.random() - 0.5) * 0.2;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.4;
     this.alpha = 1;
     this.size = 20 + Math.random() * 10;
   }
@@ -94,9 +68,10 @@ class BoneParticle {
   update() {
     this.x += this.vx;
     this.y += this.vy;
-    this.vy += 0.5; // 중력
+    this.vy += 0.8; // 중력
+    this.vx *= 0.99; // 공기 저항
     this.rotation += this.rotationSpeed;
-    this.alpha *= 0.95;
+    this.alpha *= 0.97;
   }
 
   draw(ctx) {
@@ -150,25 +125,31 @@ function startGame() {
 }
 
 function reset() {
+  gameOver = false;
   player = { x: WIDTH/2 - 20, y: HEIGHT - 70, w: 40, h: 40, speed: 280 };
   obstacles = [];
   particles = [];
   keys = { left:false, right:false };
   lastSpawn = 0;
-  spawnInterval = 800; // ms
+  spawnInterval = 800;
   score = 0;
   level = 1;
   lastTime = null;
-  gameOver = false;
+  
   // load highscore
   highScore = parseInt(localStorage.getItem('dodge_highscore') || '0', 10) || 0;
   updateHUD();
   msgEl.classList.add('hidden');
+  
   // show touch controls on small screens
   if(window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches){
     touchControls.classList.remove('hidden');
   } else {
     touchControls.classList.add('hidden');
+  }
+
+  if (!gameStarted) {
+    startScreen.style.display = 'block';
   }
 }
 
@@ -289,7 +270,6 @@ function draw(){
 
   // 플레이어
   playerSprite.draw(ctx, player.x, player.y, player.w, player.h, {
-    maltese: true,
     tilt: keys.left || keys.right
   });
 
@@ -371,10 +351,61 @@ function createBoneParticles() {
 }
 
 function start() {
-  if (!gameStarted) {
-    startGame();
-  } else {
+  if (gameOver) {
     reset();
+  }
+}
+
+function update(dt) {
+  if (!gameStarted || gameOver) return;
+  
+  // 플레이어 이동
+  if(keys.left) player.x -= player.speed * dt;
+  if(keys.right) player.x += player.speed * dt;
+  player.x = Math.max(5, Math.min(WIDTH - player.w - 5, player.x));
+
+  // spawn
+  lastSpawn += dt*1000;
+  if(lastSpawn > spawnInterval){
+    spawnObstacle();
+    lastSpawn = 0;
+    // 점점 빨라짐
+    if(spawnInterval > 350) spawnInterval *= 0.98;
+  }
+
+  // 장애물 이동 및 충돌 체크
+  for(let i=obstacles.length-1; i>=0; i--){
+    const ob = obstacles[i];
+    ob.y += ob.speed * dt;
+    if(rectsCollide(ob, player)) {
+      gameOver = true;
+      msgEl.classList.remove('hidden');
+      playSound('hit');
+      createBoneParticles();
+      if(score > highScore){
+        highScore = Math.floor(score);
+        localStorage.setItem('dodge_highscore', highScore.toString());
+        updateHUD();
+      }
+    }
+    if(ob.y > HEIGHT + 50) {
+      obstacles.splice(i,1);
+      score += 10;
+      playSound('score');
+      spawnParticles(ob.x + ob.w/2, HEIGHT - 10, '#9bffb3', 8, 8);
+      const newLevel = Math.floor(score / 100) + 1;
+      if(newLevel > level){ level = newLevel; }
+      updateHUD();
+    }
+  }
+
+  // 파티클 업데이트
+  for(let i = particles.length-1; i >= 0; i--) {
+    const p = particles[i];
+    if(p.update) {
+      p.update();
+      if(p.alpha <= 0.1) particles.splice(i, 1);
+    }
   }
 }
 

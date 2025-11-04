@@ -5,6 +5,8 @@ const scoreEl = document.getElementById('score');
 const levelEl = document.getElementById('level');
 const highEl = document.getElementById('highscore');
 const msgEl = document.getElementById('message');
+const startScreen = document.getElementById('startScreen');
+const playButton = document.getElementById('playButton');
 const touchControls = document.getElementById('touchControls');
 const btnLeft = document.getElementById('btnLeft');
 const btnRight = document.getElementById('btnRight');
@@ -74,6 +76,38 @@ class Sprite {
 
 let player, obstacles, keys, lastSpawn, spawnInterval, score, lastTime, gameOver, level, highScore, particles;
 let audioCtx;
+let gameStarted = false;
+
+// 파티클 시스템 확장
+class BoneParticle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 10;
+    this.vy = (Math.random() - 0.5) * 10 - 5;
+    this.rotation = Math.random() * Math.PI * 2;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.2;
+    this.alpha = 1;
+    this.size = 20 + Math.random() * 10;
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.5; // 중력
+    this.rotation += this.rotationSpeed;
+    this.alpha *= 0.95;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    boneSprite.draw(ctx, -this.size/2, -this.size/2, this.size, this.size, { bounce: false });
+    ctx.restore();
+  }
+}
 
 // 스프라이트 로드
 const playerSprite = new Sprite('src/images/player-dog.svg');
@@ -107,6 +141,12 @@ function playSound(type){
       o.connect(g); g.connect(audioCtx.destination); o.start(now); o.stop(now + 0.5);
     }
   }catch(e){ /* Audio not available */ }
+}
+
+function startGame() {
+  gameStarted = true;
+  startScreen.style.display = 'none';
+  reset();
 }
 
 function reset() {
@@ -219,6 +259,7 @@ function update(dt){
       msgEl.classList.remove('hidden');
       playSound('hit');
       spawnParticles(player.x + player.w/2, player.y + player.h/2, '#ff8b8b', 28, 12);
+      createBoneParticles(); // 뼈 파티클 생성
       // save highscore
       if(Math.floor(score) > highScore){
         highScore = Math.floor(score);
@@ -323,8 +364,25 @@ canvas.addEventListener('touchstart',(e)=>{
 });
 canvas.addEventListener('touchend',()=>{ keys.left=false; keys.right=false; });
 
-function start(){ reset(); }
+function createBoneParticles() {
+  for (let i = 0; i < 10; i++) {
+    particles.push(new BoneParticle(player.x + player.w/2, player.y + player.h/2));
+  }
+}
 
-// 시작
-start();
+function start() {
+  if (!gameStarted) {
+    startGame();
+  } else {
+    reset();
+  }
+}
+
+// 게임 시작 버튼 이벤트 리스너
+playButton.addEventListener('click', startGame);
+
+// 초기 상태 설정
+reset();
+startScreen.style.display = 'block';
+gameStarted = false;
 requestAnimationFrame(loop);

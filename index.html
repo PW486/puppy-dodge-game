@@ -13,10 +13,13 @@
 
     <div class="game-area">
       <canvas id="game" width="400" height="600"></canvas>
+      <div id="startScreen" class="start-screen">
+        <button id="playButton" class="play-button">게임 시작</button>
+      </div>
       <div id="hud">
         <div id="score">점수: 0</div>
         <div id="level">레벨: 1</div>
-        <div id="highscore">최고: 0</div>
+        <div id="highscore" class="highlight">최고: 0</div>
       </div>
 
       <!-- 메시지는 HUD 내부가 아니라 게임 영역 기준 중앙에 위치해야 합니다. -->
@@ -29,9 +32,7 @@
       </div>
     </div>
 
-    <footer>
-      <small>간단한 데모 게임 — HTML / CSS / JS (Canvas)</small>
-    </footer>
+    <footer></footer>
   </main>
   <script src="script.js"></script>
 </body>

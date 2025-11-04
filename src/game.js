@@ -13,13 +13,13 @@ export class Game {
     this.particles = new ParticleSystem();
     this.sound = new SoundManager();
     
-    // 게임 상태
+  // game state
     this.reset();
     
-    // 입력 상태
+  // input state
     this.keys = { left: false, right: false };
     
-    // 이벤트 바인딩
+  // bind events
     this.bindEvents();
   }
   
@@ -33,7 +33,7 @@ export class Game {
     this.lastTime = null;
     this.gameOver = false;
     
-    // 최고 기록
+  // high score
     this.highScore = storage.get('dodge_highscore', 0);
     this.newHighScore = false;
     
@@ -72,14 +72,14 @@ export class Game {
     const highEl = document.getElementById('highscore');
     const msgEl = document.getElementById('message');
     
-    scoreEl.textContent = `점수: ${formatScore(Math.floor(this.score))}`;
-    levelEl.textContent = `레벨: ${this.level}`;
-    
+    scoreEl.textContent = `Score: ${formatScore(Math.floor(this.score))}`;
+    levelEl.textContent = `Level: ${this.level}`;
+
     if (this.newHighScore) {
-      highEl.textContent = `★최고: ${formatScore(this.highScore)}★`;
+      highEl.textContent = `★High: ${formatScore(this.highScore)}★`;
       highEl.classList.add('new-high');
     } else {
-      highEl.textContent = `최고: ${formatScore(this.highScore)}`;
+      highEl.textContent = `High: ${formatScore(this.highScore)}`;
       highEl.classList.remove('new-high');
     }
     
@@ -93,12 +93,12 @@ export class Game {
   update(dt) {
     if (this.gameOver) return;
     
-    // 플레이어 이동
+  // player movement
     if (this.keys.left) this.player.move(-1, dt);
     if (this.keys.right) this.player.move(1, dt);
     this.player.x = Math.max(5, Math.min(this.width - this.player.width - 5, this.player.x));
     
-    // 장애물 생성
+  // spawn obstacles
     this.lastSpawn += dt * 1000;
     if (this.lastSpawn > this.spawnInterval) {
       this.spawnObstacle();
@@ -106,7 +106,7 @@ export class Game {
       if (this.spawnInterval > 350) this.spawnInterval *= 0.98;
     }
     
-    // 장애물 업데이트 및 충돌 체크
+  // update obstacles and check collisions
     for (let i = this.obstacles.length - 1; i >= 0; i--) {
       const obstacle = this.obstacles[i];
       const removed = obstacle.update(dt);
@@ -159,25 +159,25 @@ export class Game {
       }
     }
     
-    // 파티클 업데이트
+    // particles update
     this.particles.update(dt);
   }
   
   draw() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     
-    // 플레이어
+  // player
     this.player.draw(this.ctx);
     
-    // 장애물
+    // obstacles
     for (const obstacle of this.obstacles) {
       obstacle.draw(this.ctx);
     }
     
-    // 파티클
+  // particles
     this.particles.draw(this.ctx);
     
-    // 게임오버 오버레이
+    // game over overlay
     if (this.gameOver) {
       this.ctx.fillStyle = 'rgba(0,0,0,0.4)';
       this.ctx.fillRect(0, 0, this.width, this.height);

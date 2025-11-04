@@ -1,4 +1,4 @@
-// 간단한 강아지 회피 게임 (Canvas) — 기능 확장: 터치 버튼, 사운드, 레벨, 최고점, 파티클
+// Simple Puppy Dodge Game (Canvas) — features: touch controls, sound, levels, high score
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
@@ -14,7 +14,7 @@ const btnRight = document.getElementById('btnRight');
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
-// Sprite 시스템
+// Sprite system
 class Sprite {
   constructor(imagePath) {
     this.image = new Image();
@@ -31,13 +31,13 @@ class Sprite {
     ctx.save();
     ctx.translate(x + w/2, y + h/2);
     
-    // 통통 튀는 효과
+  // subtle bounce effect
     if (options.bounce !== false) {
       const bounce = Math.sin(Date.now() / 150) * 2;
       ctx.translate(0, bounce);
     }
     
-    // 달리는 효과 (좌우 기울기)
+  // tilt effect while moving left/right
     if (options.tilt) {
       ctx.rotate(Math.sin(Date.now() / 100) * 0.1);
     }
@@ -52,9 +52,9 @@ let player, obstacles, keys, lastSpawn, spawnInterval, score, lastTime, gameOver
 let audioCtx;
 let gameStarted = false;
 
-// 파티클 시스템 제거: 효과 없음
+// Particle system disabled (no effects)
 
-// 스프라이트 로드
+// Load sprites
 const playerSprite = new Sprite('src/images/player-dog.svg');
 const obstacleSprite = new Sprite('src/images/obstacle-dog.svg');
 
@@ -130,14 +130,14 @@ function spawnObstacle() {
 }
 
 function updateHUD() {
-  scoreEl.textContent = `점수: ${Math.floor(score)}`;
-  levelEl.textContent = `레벨: ${level}`;
-  highEl.textContent = `최고: ${highScore}`;
+  scoreEl.textContent = `Score: ${Math.floor(score)}`;
+  levelEl.textContent = `Level: ${level}`;
+  highEl.textContent = `High: ${highScore}`;
 }
 
 function rectsCollide(a,b){
-  // 실제 캐릭터 크기의 70%만 충돌 영역으로 사용
-  const margin = 0.15; // 15% 여백
+  // Use ~70% of the sprite bounds for collision to be forgiving
+  const margin = 0.15; // 15% margin
   const ax = a.x + a.w * margin;
   const ay = a.y + a.h * margin;
   const aw = a.w * (1 - margin * 2);
@@ -151,7 +151,7 @@ function rectsCollide(a,b){
   return !(ax + aw < bx || ax > bx + bw || ay + ah < by || ay > by + bh);
 }
 
-// 파티클 관련 함수 제거 (효과 없음)
+// Particle functions removed
 
 function update(dt){
   if(gameOver) return;
@@ -166,7 +166,7 @@ function update(dt){
   if(lastSpawn > spawnInterval){
     spawnObstacle();
     lastSpawn = 0;
-    // 점점 빨라짐
+  // gradually speed up
     if(spawnInterval > 350) spawnInterval *= 0.98;
   }
 
@@ -187,7 +187,7 @@ function update(dt){
     }
     if(ob.y > HEIGHT + 50) {
       obstacles.splice(i,1);
-      score += 10; // 피할 때마다 점수
+  score += 10; // add points for avoiding an obstacle
       playSound('score');
       // level up for every 100 points
       const newLevel = Math.floor(score / 100) + 1;
@@ -200,20 +200,20 @@ function update(dt){
 }
 
 function draw(){
-  // 배경
+  // background
   ctx.clearRect(0,0,WIDTH,HEIGHT);
 
-  // 플레이어
+  // player
   playerSprite.draw(ctx, player.x, player.y, player.w, player.h, {
     tilt: keys.left || keys.right
   });
 
-  // 장애물
+  // obstacles
   for(const ob of obstacles){
     obstacleSprite.draw(ctx, ob.x, ob.y, ob.w, ob.h);
   }
 
-  // 파티클 비활성화: 표시하지 않음
+  // particles disabled: not rendered
 
   // if game over overlay
   if(gameOver){
@@ -233,7 +233,7 @@ function loop(ts){
   requestAnimationFrame(loop);
 }
 
-// 입력
+// input
 window.addEventListener('keydown', (e)=>{
   if(e.code === 'ArrowLeft') keys.left = true;
   if(e.code === 'ArrowRight') keys.right = true;
@@ -244,9 +244,9 @@ window.addEventListener('keyup', (e)=>{
   if(e.code === 'ArrowRight') keys.right = false;
 });
 
-// 캔버스 클릭으로 재시작하지 않음 (사용자 요청): 재시작은 버튼 또는 R키로만 가능
+// Do not restart on canvas click (by request): restart only via Restart button or R key
 
-// 터치/버튼 입력 처리 (지속 이동 지원)
+// Touch/button input handling (supports continuous movement)
 btnLeft.addEventListener('touchstart', (e)=>{ e.preventDefault(); keys.left = true; });
 btnLeft.addEventListener('touchend', (e)=>{ e.preventDefault(); keys.left = false; });
 btnLeft.addEventListener('mousedown', ()=> keys.left = true);
@@ -257,7 +257,7 @@ btnRight.addEventListener('touchend', (e)=>{ e.preventDefault(); keys.right = fa
 btnRight.addEventListener('mousedown', ()=> keys.right = true);
 btnRight.addEventListener('mouseup', ()=> keys.right = false);
 
-// 기존 터치(화면 어디든지 누름)도 지원: 좌/우 반으로 나눠 처리
+// Also support full-screen touch: split left/right half for controls
 canvas.addEventListener('touchstart',(e)=>{
   const t = e.touches[0];
   const rect = canvas.getBoundingClientRect();
@@ -278,7 +278,7 @@ function start() {
 function update(dt) {
   if (!gameStarted || gameOver) return;
   
-  // 플레이어 이동
+  // player movement
   if(keys.left) player.x -= player.speed * dt;
   if(keys.right) player.x += player.speed * dt;
   player.x = Math.max(5, Math.min(WIDTH - player.w - 5, player.x));
@@ -288,11 +288,11 @@ function update(dt) {
   if(lastSpawn > spawnInterval){
     spawnObstacle();
     lastSpawn = 0;
-    // 점점 빨라짐
+  // gradually speed up
     if(spawnInterval > 350) spawnInterval *= 0.98;
   }
 
-  // 장애물 이동 및 충돌 체크
+  // move obstacles and check collisions
   for(let i=obstacles.length-1; i>=0; i--){
     const ob = obstacles[i];
     ob.y += ob.speed * dt;
@@ -316,7 +316,7 @@ function update(dt) {
     }
   }
 
-  // 파티클 시스템 제거 - 아무 동작 없음
+  // particle system removed - no operation
 }
 
 // 게임 시작 버튼 이벤트 리스너

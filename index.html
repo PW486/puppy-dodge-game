@@ -1,37 +1,36 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>강아지 회피 게임 - HTML/CSS/JS 게임</title>
+  <title>Puppy Dodge Game</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="wrap">
-    <h1>강아지 회피 게임</h1>
-    <p class="instructions">좌/우 화살표로 이동하세요. 다른 강아지들을 피하면 점수가 올라갑니다. 충돌 시 R 또는 클릭으로 재시작.</p>
+  <h1>Puppy Dodge Game</h1>
+  <p class="instructions">Use the left/right arrow keys to move. Avoid other puppies to score points. Press R or the Restart button to restart after a collision.</p>
 
     <div class="game-area">
       <canvas id="game" width="400" height="600"></canvas>
       <div id="startScreen" class="start-screen">
-        <button id="playButton" class="play-button">게임 시작</button>
+        <button id="playButton" class="play-button">Start Game</button>
       </div>
       <div id="hud">
-        <div id="score">점수: 0</div>
-        <div id="level">레벨: 1</div>
-        <div id="highscore" class="highlight">최고: 0</div>
+        <div id="score">Score: 0</div>
+        <div id="level">Level: 1</div>
+        <div id="highscore" class="highlight">High: 0</div>
       </div>
-
-      <!-- 메시지는 HUD 내부가 아니라 게임 영역 기준 중앙에 위치해야 합니다. -->
+      <!-- Game over message (centered inside game area) -->
         <div id="message" class="hidden">
-          <h2>게임 오버!</h2>
-          <button id="restartButton" class="play-button">다시 시작</button>
+          <h2>Game Over!</h2>
+          <button id="restartButton" class="play-button">Restart</button>
         </div>
 
-      <!-- 터치용 컨트롤 -->
+      <!-- Touch controls -->
       <div id="touchControls" class="touch-controls hidden" aria-hidden="true">
-        <button id="btnLeft" class="touch-btn" aria-label="왼쪽">◀</button>
-        <button id="btnRight" class="touch-btn" aria-label="오른쪽">▶</button>
+        <button id="btnLeft" class="touch-btn" aria-label="Left">◀</button>
+        <button id="btnRight" class="touch-btn" aria-label="Right">▶</button>
       </div>
     </div>
 

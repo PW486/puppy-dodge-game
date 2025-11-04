@@ -7,10 +7,10 @@
     .cheek { fill: #ffefef; }
   </style>
   <g class="dog">
-    <!-- 몸통 -->
+    <!-- body -->
     <circle cx="20" cy="20" r="18" class="dog"/>
 
-    <!-- 얼굴 디테일 (눈, 코, 볼) -->
+  <!-- face details (eyes, nose, cheeks) -->
     <circle class="cheek" cx="12" cy="22" r="4" opacity="0.6"/>
     <circle class="cheek" cx="28" cy="22" r="4" opacity="0.6"/>
     <circle cx="15" cy="18" r="2.2" fill="#222"/>
@@ -20,7 +20,7 @@
     <circle class="nose" cx="20" cy="21" r="2"/>
     <path d="M15,24 Q20,26 25,24" stroke="#222" fill="none" stroke-width="1.5" stroke-linecap="round"/>
 
-    <!-- 귀: 말티즈 스타일, 몸통 위에 그려서 바깥으로 노출되도록 -->
+  <!-- ears: Maltese style, drawn on top to appear outside the body -->
     <path class="ear" d="M7 6 C4 5 2 8 4 12 C6 16 8 18 10 16 C9 12 8 9 7 6 Z" stroke="#eee" stroke-width="0.6"/>
     <path class="ear" d="M33 6 C36 5 38 8 36 12 C34 16 32 18 30 16 C31 12 32 9 33 6 Z" stroke="#eee" stroke-width="0.6"/>
   </g>

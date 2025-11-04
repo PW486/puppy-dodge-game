@@ -1,4 +1,4 @@
-// 파티클 시스템
+// Particle system
 export class ParticleSystem {
   constructor() {
     this.particles = [];
@@ -44,10 +44,10 @@ export class ParticleSystem {
         continue;
       }
 
-      // 중력과 공기저항 시뮬레이션
-      p.vy += 300 * dt; // 중력
-      p.vx *= 0.99; // 공기저항
-      p.vy *= 0.99;
+  // gravity and air resistance simulation
+  p.vy += 300 * dt; // gravity
+  p.vx *= 0.99; // air resistance
+  p.vy *= 0.99;
 
       p.x += p.vx * dt;
       p.y += p.vy * dt;
@@ -68,7 +68,7 @@ export class ParticleSystem {
         ctx.drawImage(this.boneImage, -p.size/2, -p.size/2, p.size, p.size);
         ctx.restore();
       } else {
-        // 원형 파티클 (기본)
+  // circular particle (default)
         const gradient = ctx.createRadialGradient(
           p.x, p.y, 0,
           p.x, p.y, p.size

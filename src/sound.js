@@ -1,4 +1,4 @@
-// 사운드 관리
+// Sound manager
 export class SoundManager {
   constructor() {
     this.audioCtx = null;

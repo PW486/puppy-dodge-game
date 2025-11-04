@@ -7,12 +7,12 @@ export function collision(a, b) {
   );
 }
 
-// 점수를 문자열로 변환할 때 콤마와 적절한 패딩 추가
+// Format score as a string with commas and padding
 export function formatScore(score) {
   return score.toString().padStart(6, '0').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-// localStorage 래퍼
+// localStorage wrapper
 export const storage = {
   get: (key, defaultValue) => {
     try {

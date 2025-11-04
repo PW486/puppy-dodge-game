@@ -48,50 +48,15 @@ class Sprite {
   }
 }
 
-let player, obstacles, keys, lastSpawn, spawnInterval, score, lastTime, gameOver, level, highScore, particles;
+let player, obstacles, keys, lastSpawn, spawnInterval, score, lastTime, gameOver, level, highScore;
 let audioCtx;
 let gameStarted = false;
 
-// 파티클 시스템 확장
-class BoneParticle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.vx = (Math.random() - 0.5) * 15;
-    this.vy = (Math.random() - 0.5) * 15 - (isGameOver ? 15 : 5);
-    const speed = isGameOver ? 30 : 15;
-    this.rotationSpeed = (Math.random() - 0.5) * (isGameOver ? 0.8 : 0.4);
-    this.alpha = 1;
-    this.size = isGameOver ? 25 + Math.random() * 15 : 15 + Math.random() * 10;
-    this.rotation = Math.random() * Math.PI * 2;
-    this.rotationSpeed = (Math.random() - 0.5) * 0.4;
-    this.alpha = 1;
-    this.size = 20 + Math.random() * 10;
-  }
-
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.vy += 0.8; // 중력
-    this.vx *= 0.99; // 공기 저항
-    this.rotation += this.rotationSpeed;
-    this.alpha *= 0.97;
-  }
-
-  draw(ctx) {
-    ctx.save();
-    ctx.globalAlpha = this.alpha;
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.rotation);
-    boneSprite.draw(ctx, -this.size/2, -this.size/2, this.size, this.size, { bounce: false });
-    ctx.restore();
-  }
-}
+// 파티클 시스템 제거: 효과 없음
 
 // 스프라이트 로드
 const playerSprite = new Sprite('src/images/player-dog.svg');
 const obstacleSprite = new Sprite('src/images/obstacle-dog.svg');
-const boneSprite = new Sprite('src/images/particle-bone.svg');
 
 function ensureAudio(){
   if(audioCtx) return;
@@ -132,7 +97,6 @@ function reset() {
   gameOver = false;
   player = { x: WIDTH/2 - 20, y: HEIGHT - 70, w: 40, h: 40, speed: 280 };
   obstacles = [];
-  particles = [];
   keys = { left:false, right:false };
   lastSpawn = 0;
   spawnInterval = 800;
@@ -187,36 +151,7 @@ function rectsCollide(a,b){
   return !(ax + aw < bx || ax > bx + bw || ay + ah < by || ay > by + bh);
 }
 
-function spawnParticles(x, y, color, count=12, size=4){
-  for(let i=0; i<count; i++){
-    const angle = Math.random()*Math.PI*2;
-    const speed = 40 + Math.random()*180;
-    particles.push({ 
-      x, y, 
-      vx: Math.cos(angle)*speed, 
-      vy: Math.sin(angle)*speed, 
-      life: 0.6 + Math.random()*0.6, 
-      color,
-      size,
-      rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * 5
-    });
-  }
-}
-
-function updateParticles(dt){
-  for(let i=particles.length-1; i>=0; i--){
-    const p = particles[i];
-    p.life -= dt;
-    if(p.life <= 0) { particles.splice(i,1); continue; }
-    p.vy += 300 * dt; // gravity
-    p.vx *= 0.99; // air resistance
-    p.vy *= 0.99;
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
-    p.rotation += p.rotationSpeed * dt;
-  }
-}
+// 파티클 관련 함수 제거 (효과 없음)
 
 function update(dt){
   if(gameOver) return;
@@ -243,8 +178,6 @@ function update(dt){
       gameOver = true;
       msgEl.classList.remove('hidden');
       playSound('hit');
-      spawnParticles(player.x + player.w/2, player.y + player.h/2, '#ff8b8b', 28, 12);
-      createBoneParticles(); // 뼈 파티클 생성
       // save highscore
       if(Math.floor(score) > highScore){
         highScore = Math.floor(score);
@@ -256,8 +189,6 @@ function update(dt){
       obstacles.splice(i,1);
       score += 10; // 피할 때마다 점수
       playSound('score');
-      // spawn small particles to celebrate
-      spawnParticles(ob.x + ob.w/2, HEIGHT - 10, '#9bffb3', 8, 8);
       // level up for every 100 points
       const newLevel = Math.floor(score / 100) + 1;
       if(newLevel > level){ level = newLevel; }
@@ -265,7 +196,7 @@ function update(dt){
     }
   }
 
-  updateParticles(dt);
+  // particles removed: no per-frame particle updates
 }
 
 function draw(){
@@ -282,17 +213,7 @@ function draw(){
     obstacleSprite.draw(ctx, ob.x, ob.y, ob.w, ob.h);
   }
 
-  // 파티클
-  for(const p of particles){
-    const alpha = Math.max(0, Math.min(1, p.life));
-    ctx.globalAlpha = alpha;
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rotation);
-    boneSprite.draw(ctx, -p.size/2, -p.size/2, p.size, p.size);
-    ctx.restore();
-    ctx.globalAlpha = 1;
-  }
+  // 파티클 비활성화: 표시하지 않음
 
   // if game over overlay
   if(gameOver){
@@ -323,9 +244,7 @@ window.addEventListener('keyup', (e)=>{
   if(e.code === 'ArrowRight') keys.right = false;
 });
 
-canvas.addEventListener('click', ()=>{
-  if(gameOver) start();
-});
+// 캔버스 클릭으로 재시작하지 않음 (사용자 요청): 재시작은 버튼 또는 R키로만 가능
 
 // 터치/버튼 입력 처리 (지속 이동 지원)
 btnLeft.addEventListener('touchstart', (e)=>{ e.preventDefault(); keys.left = true; });
@@ -348,11 +267,7 @@ canvas.addEventListener('touchstart',(e)=>{
 });
 canvas.addEventListener('touchend',()=>{ keys.left=false; keys.right=false; });
 
-function createBoneParticles() {
-  for (let i = 0; i < 10; i++) {
-     particles.push(new BoneParticle(player.x + player.w/2, player.y + player.h/2, true));
-  }
-}
+// createBoneParticles removed (particles disabled)
 
 function start() {
   if (gameOver) {
@@ -384,8 +299,7 @@ function update(dt) {
     if(rectsCollide(ob, player)) {
       gameOver = true;
       msgEl.classList.remove('hidden');
-      playSound('hit');
-      createBoneParticles();
+  playSound('hit');
       if(score > highScore){
         highScore = Math.floor(score);
         localStorage.setItem('dodge_highscore', highScore.toString());
@@ -395,26 +309,26 @@ function update(dt) {
     if(ob.y > HEIGHT + 50) {
       obstacles.splice(i,1);
       score += 10;
-      playSound('score');
-      spawnParticles(ob.x + ob.w/2, HEIGHT - 10, '#9bffb3', 8, 8);
+  playSound('score');
       const newLevel = Math.floor(score / 100) + 1;
       if(newLevel > level){ level = newLevel; }
       updateHUD();
     }
   }
 
-  // 파티클 업데이트
-  for(let i = particles.length-1; i >= 0; i--) {
-    const p = particles[i];
-    if(p.update) {
-      p.update();
-      if(p.alpha <= 0.1) particles.splice(i, 1);
-    }
-  }
+  // 파티클 시스템 제거 - 아무 동작 없음
 }
 
 // 게임 시작 버튼 이벤트 리스너
 playButton.addEventListener('click', startGame);
+
+// 재시작 버튼(게임오버) 처리: 캔버스 외부 클릭이 아닌 버튼으로만 재시작
+const restartButton = document.getElementById('restartButton');
+if (restartButton) {
+  restartButton.addEventListener('click', () => {
+    startGame();
+  });
+}
 
 // 초기 상태 설정
 reset();

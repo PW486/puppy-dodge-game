@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>강아지 회피 게임 - HTML/CSS/JS 게임</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>강아지 회피 게임</h1>
+    <p class="instructions">좌/우 화살표로 이동하세요. 다른 강아지들을 피하면 점수가 올라갑니다. 충돌 시 R 또는 클릭으로 재시작.</p>
+
+    <div class="game-area">
+      <canvas id="game" width="400" height="600"></canvas>
+      <div id="hud">
+        <div id="score">점수: 0</div>
+        <div id="level">레벨: 1</div>
+        <div id="highscore">최고: 0</div>
+      </div>
+
+      <!-- 메시지는 HUD 내부가 아니라 게임 영역 기준 중앙에 위치해야 합니다. -->
+      <div id="message" class="hidden">게임 오버 — 클릭 또는 R키로 재시작</div>
+
+      <!-- 터치용 컨트롤 -->
+      <div id="touchControls" class="touch-controls hidden" aria-hidden="true">
+        <button id="btnLeft" class="touch-btn" aria-label="왼쪽">◀</button>
+        <button id="btnRight" class="touch-btn" aria-label="오른쪽">▶</button>
+      </div>
+    </div>
+
+    <footer>
+      <small>간단한 데모 게임 — HTML / CSS / JS (Canvas)</small>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

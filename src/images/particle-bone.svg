@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bone { fill: #fff; stroke: #ccc; }
+  </style>
+  <path class="bone" d="M4,6 Q2,6 2,4 T4,2 L16,2 Q18,2 18,4 T16,6 L16,14 Q18,14 18,16 T16,18 L4,18 Q2,18 2,16 T4,14 Z" stroke-width="1"/>
+</svg>

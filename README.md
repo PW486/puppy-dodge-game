@@ -1,19 +1,19 @@
-## Puppy Dodge Game
+## 🐶 Puppy Dodge Game
 
-### How to play
+### 🕹️ How to play
 
-- Move left: Left Arrow
-- Move right: Right Arrow
-- Restart after game over: Press `R`, `Space`, or click the Restart button
-- Touch controls: On touch devices, on-screen left/right buttons appear automatically; you can also tap the left/right side of the canvas
+- Move left: Left Arrow ⬅️
+- Move right: Right Arrow ➡️
+- Restart after game over: Press `R`, `Space`, or click the Restart button 🔁
+- Touch controls: On touch devices, on-screen left/right buttons appear automatically; you can also tap the left/right side of the canvas 📱
 
-### Gameplay notes
+### ✨ Gameplay notes
 
-- Avoid falling obstacles. Each obstacle you successfully dodge gives +10 points.
-- Levels increase as your score grows, making obstacles spawn faster.
-- High score is saved in your browser's localStorage.
+- Avoid falling obstacles. Each obstacle you successfully dodge gives +10 points 🏆.
+- Levels increase as your score grows, making obstacles spawn faster ⚡.
+- High score is saved in your browser's localStorage 💯.
 
-### Quick run
+### ▶️ Quick run
 
-- Link: https://pw486.github.io/puppy-dodge-game
-- Open `index.html` in a modern browser.
+- Link: https://pw486.github.io/puppy-dodge-game 🌐
+- Open `index.html` in a modern browser 🖥️ or serve the folder with a local server for best results.

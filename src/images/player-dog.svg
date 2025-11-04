@@ -21,7 +21,7 @@
     <path d="M15,24 Q20,26 25,24" stroke="#222" fill="none" stroke-width="1.5" stroke-linecap="round"/>
 
   <!-- ears: Maltese style, drawn on top to appear outside the body -->
-    <path class="ear" d="M7 6 C4 5 2 8 4 12 C6 16 8 18 10 16 C9 12 8 9 7 6 Z" stroke="#eee" stroke-width="0.6"/>
-    <path class="ear" d="M33 6 C36 5 38 8 36 12 C34 16 32 18 30 16 C31 12 32 9 33 6 Z" stroke="#eee" stroke-width="0.6"/>
+    <path class="ear" d="M6 2 C3 1 1 5 3 10 C5 15 8 17 11 14 C9 9 7 6 6 2 Z"/>
+    <path class="ear" d="M34 2 C37 1 39 5 37 10 C35 15 32 17 29 14 C31 9 33 6 34 2 Z"/>
   </g>
 </svg>

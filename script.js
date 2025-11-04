@@ -246,3 +246,32 @@ reset();
 startScreen.style.display = 'block';
 gameStarted = false;
 requestAnimationFrame(loop);
+
+(function(){
+  document.addEventListener('gesturestart', function(e){
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchmove', function(e){
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  let _lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e){
+    const now = Date.now();
+    if (now - _lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    _lastTouchEnd = now;
+  }, { passive: false });
+
+  document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+  });
+
+  try{
+    document.querySelectorAll('img').forEach(img => img.setAttribute('draggable','false'));
+  }catch(e){}
+})();

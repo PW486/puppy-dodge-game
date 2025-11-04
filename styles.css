@@ -1,4 +1,12 @@
 * { box-sizing: border-box; }
+html, body, .wrap, .game-area, canvas, button, .touch-btn, img, .play-button {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  touch-action: none;
+  -ms-touch-action: none;
+}
 html { height:100%; background-color: #0f172a; }
 html, body { height:100%; }
 body {

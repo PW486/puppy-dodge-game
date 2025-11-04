@@ -319,10 +319,10 @@ function update(dt) {
   // particle system removed - no operation
 }
 
-// 게임 시작 버튼 이벤트 리스너
+// Game start button event listener
 playButton.addEventListener('click', startGame);
 
-// 재시작 버튼(게임오버) 처리: 캔버스 외부 클릭이 아닌 버튼으로만 재시작
+// Handling the restart button (game over): Restart only with the button, not by clicking outside the canvas
 const restartButton = document.getElementById('restartButton');
 if (restartButton) {
   restartButton.addEventListener('click', () => {
@@ -330,7 +330,7 @@ if (restartButton) {
   });
 }
 
-// 초기 상태 설정
+// Set initial state
 reset();
 startScreen.style.display = 'block';
 gameStarted = false;

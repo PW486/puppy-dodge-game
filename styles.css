@@ -6,19 +6,19 @@ body {
 }
 .wrap { text-align:center; width:100%; max-width:540px; padding:24px; }
 h1 {
-  font-size: 24px; /* 기본 크기 */
+  font-size: 24px; /* default size */
 }
 
 @media (max-width: 600px) {
   h1 {
-    font-size: 24px; /* 모바일에서의 크기 */
+    font-size: 24px; /* mobile size */
   }
   .wrap {
-    padding: 12px; /* 모바일에서 패딩 줄임 */
+    padding: 12px; /* reduce padding on mobile */
   }
   .game-area {
-    width: 100%; /* 게임 화면을 모바일에 맞게 조정 */
-    overflow: hidden; /* 스크롤 방지 */
+    width: 100%; /* adjust game screen for mobile */
+    overflow: hidden; /* prevent scrolling */
   }
 }
 .instructions { margin:0 0 24px; color:#9fb0d6; }
